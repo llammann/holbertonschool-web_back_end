@@ -1,3 +1,1 @@
-ES6 Basics
-
-Laman Nazirli
+README.md for ES6 basics
