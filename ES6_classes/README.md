@@ -1,3 +1,1 @@
-ES6 classes
-
-Laman Nazirli
+README.md for ES6 classes directory
