@@ -1,17 +1,10 @@
 #!/usr/bin/env python3
-""" Task 2. Run time for four parallel comprehensions """
+""" Task 1. Async Comprehensions """
 from typing import List
-import time
-import asyncio
 
-async_comprehension = __import__('1-async_comprehension').async_comprehension
+async_generator = __import__('0-async_generator').async_generator
 
 
-async def measure_runtime() -> float:
-    """  the coroutine that runs async_comprehension four times concurrently using asyncio.gather """
-    start = time.time()
-    await asyncio.gather(async_comprehension(), async_comprehension(),
-                         async_comprehension(), async_comprehension(),
-                         )
-    end = time.time()
-    return (end - start)
+async def async_comprehension() -> List[float]:
+    """  the coroutine collect 10 random numbers & return the 10 rand numbers """
+    return [i async for i in async_generator()]
