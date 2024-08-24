@@ -3,6 +3,7 @@
 
 from typing import List, Dict
 
+
 def list_all(mongo_collection) -> List[Dict]:
     """ Retrieves all documents from the specified collection.
 
