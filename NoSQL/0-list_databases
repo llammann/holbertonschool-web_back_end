@@ -1,3 +1,4 @@
 #!/bin/bash
 # List all databases in MongoDB
 show dbs
+
