@@ -3,9 +3,9 @@
 
 from typing import List, Dict
 
-def list_all(collection) -> List[Dict]:
+def list_all(mongo_collection) -> List[Dict]:
     """ retrieves all documents from the specified collection """
     if collection:
-        return list(collection.find())
+        return list(mongo_collection.find())
     return []
 
