@@ -22,7 +22,7 @@ class Server:
         self.__dataset: List[List[str]] = []
 
 
-    def dataset(self) -> List[List[str]]:
+    def dataset(self) -> List[List]:
         """Loads the dataset from the CSV file, caching it after the first load."""
         if not self.__dataset:
             with open(self.DATA_FILE) as file:
@@ -33,7 +33,7 @@ class Server:
         return self.__dataset
 
 
-    def get_page(self, page: int = 1, page_size: int = 10) -> List[List[str]]:
+    def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
         Retrieves a page from the dataset.
 
