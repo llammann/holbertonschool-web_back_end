@@ -1,14 +1,10 @@
 #!/usr/bin/env python3
 """ Task 1: Simple pagination """
 import csv
-from typing import List, Tuple
+from typing import List
 
 
-def index_range(page: int, page_size: int) -> Tuple[int, int]:
-    """Return a tuple containing a start index and an end index"""
-    start_index = (page - 1) * page_size
-    end_index = start_index + page_size
-    return start_index, end_index
+index_range = __import__('0-simple_helper_function').index_range
 
 
 class Server:
@@ -16,11 +12,13 @@ class Server:
 
     DATA_FILE = "Popular_Baby_Names.csv"
 
+
     def __init__(self) -> None:
         """Initializes a Server instance."""
-        self.__dataset: List[List[str]] = []
+        self.__dataset: List[List] = []
 
-    def dataset(self) -> List[List[str]]:
+
+    def dataset(self) -> List[List]:
         """Loads the dataset from the CSV file, caching it after the first load."""
         if not self.__dataset:
             with open(self.DATA_FILE) as file:
@@ -30,7 +28,8 @@ class Server:
 
         return self.__dataset
 
-    def get_page(self, page: int = 1, page_size: int = 10) -> List[List[str]]:
+
+    def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
         """
         Retrieves a page from the dataset.
 
@@ -39,7 +38,7 @@ class Server:
         - page_size (int): The number of items per page.
 
         Returns:
-        - List[List[str]]: The data for the requested page.
+        - List of lists: The data for the requested page.
         """
         assert isinstance(page, int) and page > 0, "Page number must be a positive integer."
         assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
