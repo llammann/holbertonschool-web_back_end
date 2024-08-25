@@ -1,78 +1,76 @@
 #!/usr/bin/env python3
-""" Task 2: Hypermedia pagination """
+""" 2. Hypermedia pagination """
 import csv
 import math
-from typing import List, Dict, Any
+from typing import List, Dict
 
 index_range = __import__('0-simple_helper_function').index_range
 
+
 class Server:
-    """Server class to paginate a database of popular baby names."""
+    """Server class to paginate a database of popular baby names """
 
     DATA_FILE = "Popular_Baby_Names.csv"
 
     def __init__(self):
-        """Initializes a Server instance."""
+        """ Initializes an instance of server class """
         self.__dataset = None
 
     def dataset(self) -> List[List]:
-        """Loads the dataset from the CSV file, caching it after the first load."""
+        """ Cached dataset """
+
         if self.__dataset is None:
-            with open(self.DATA_FILE) as file:
-                reader = csv.reader(file)
-                data = [row for row in reader]
-            self.__dataset = data[1:]  # Skip the header row
+            with open(self.DATA_FILE) as f:
+                reader = csv.reader(f)
+                dataset = [row for row in reader]
+            self.__dataset = dataset[1:]
 
         return self.__dataset
 
     def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """
-        Retrieves a page from the dataset.
+        """ Finds indexes to paginate and returns the corresponding pages """
+        assert type(page) is int and page > 0
+        assert type(page_size) is int and page_size > 0
 
-        Args:
-        - page (int): The page number to retrieve.
-        - page_size (int): The number of items per page.
+        all_of_data = self.dataset()
+        Page_list = []
 
-        Returns:
-        - List of lists: The data for the requested page.
-        """
-        assert isinstance(page, int) and page > 0, "Page number must be a positive integer."
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
+        """ Check to see if # of entries is larger than dataset """
+        the_range = (page * page_size)
+        if the_range > len(all_of_data):
+            """ Return empty list if yes """
+            return Page_list
 
-        dataset = self.dataset()
-        start_idx, end_idx = index_range(page, page_size)
+        """ Between start and end idx create new page and append to list """
+        both_indexes = index_range(page, page_size)
+        for i in range(both_indexes[0], both_indexes[1]):
+            new_page = all_of_data[i]
+            Page_list.append(new_page)
+        return Page_list
 
-        # If start index exceeds dataset length, return an empty list
-        if start_idx >= len(dataset):
-            return []
+    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict:
+        """ Return a dict containing the key/value pairs as listed """
+        hp_dict = {}
+        all_of_data = self.dataset()
+        data_size = len(all_of_data)
+        the_range = (page * page_size)
+        total_page = (data_size + 1) / page_size
+        if the_range > data_size:
+            hp_dict['page_size'] = 0
+            hp_dict['page'] = page
+            hp_dict['data'] = []
+            hp_dict['next_page'] = None
+            hp_dict['prev_page'] = (page - 1)
+            hp_dict['total_pages'] = (total_page + 1)
 
-        return dataset[start_idx:end_idx]
-
-    def get_hyper(self, page: int = 1, page_size: int = 10) -> Dict[str, Any]:
-        """
-        Retrieves a page from the dataset and provides pagination information.
-
-        Args:
-        - page (int): The page number to retrieve.
-        - page_size (int): The number of items per page.
-
-        Returns:
-        - Dict: A dictionary containing pagination information.
-        """
-        dataset = self.dataset()
-        total_items = len(dataset)
-        total_pages = math.ceil(total_items / page_size)
-        page_data = self.get_page(page, page_size)
-
-        next_page = page + 1 if page < total_pages else None
-        prev_page = page - 1 if page > 1 else None
-
-        return {
-            'page_size': len(page_data),
-            'page': page,
-            'data': page_data,
-            'next_page': next_page,
-            'prev_page': prev_page,
-            'total_pages': total_pages
-        }
-
+        else:
+            hp_dict['page_size'] = page_size
+            hp_dict['page'] = page
+            hp_dict['data'] = self.get_page(page, page_size)
+            hp_dict['next_page'] = (page + 1)
+            if hp_dict['page'] == 1:
+                hp_dict['prev_page'] = None
+            else:
+                hp_dict['prev_page'] = (page - 1)
+            hp_dict['total_pages'] = total_page
+        return hp_dict
