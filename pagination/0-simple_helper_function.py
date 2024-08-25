@@ -1,16 +1,10 @@
 #!/usr/bin/env python3
 """ Task 0: Simple helper function """
+from typing import Tuple
 
+def index_range(page: int, page_size: int) -> Tuple[int, int]:
+    """Return a tuple containing a start and end index."""
+    start_index = (page - 1) * page_size
+    end_index = page * page_size
+    return (start_index, end_index)
 
-def index_range(page: int, page_size: int) -> tuple:
-    """ return a tuple of size two containing a start and end index """
-    range = ()
-    if page == 1:
-        Start_index = 0
-        End_index = page * page_size
-        range = (Start_index, End_index)
-    else:
-        Start_index = (page - 1) * page_size
-        End_index = page * page_size
-        range = (Start_index, End_index)
-    return range
