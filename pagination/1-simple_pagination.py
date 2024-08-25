@@ -30,25 +30,13 @@ class Server:
         return self.__dataset
 
 
-    def get_page(self, page: int = 1, page_size: int = 10) -> List[List]:
-        """
-        Retrieves a page from the dataset.
+   def get_page(self, page: int = 1, page_size: int = 10) -> List[List[str]]:
+    """Finds indexes to paginate and returns the corresponding pages."""
+    assert isinstance(page, int) and page > 0, "Page number must be a positive integer."
+    assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
 
-        Args:
-            page (int): The page number to retrieve.
-            page_size (int): The number of items per page.
-
-        Returns:
-            List[List[str]]: The data for the requested page.
-        """
-        # Validate input types and values
-        assert isinstance(page, int) and page > 0, "Page number must be a positive integer."
-        assert isinstance(page_size, int) and page_size > 0, "Page size must be a positive integer."
-
-        dataset = self.dataset()
-        start_idx, end_idx = index_range(page, page_size)
-
-        # Check if the start index is within the bounds of the dataset
-        if start_idx >= len(dataset):
-            return []
+    all_of_data = self.dataset()
+    start_idx, end_idx = index_range(page, page_size)
+    
+    return all_of_data[start_idx:end_idx]
 
