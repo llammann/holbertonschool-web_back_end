@@ -13,10 +13,8 @@ class Server:
     DATA_FILE = "Popular_Baby_Names.csv"
 
 
-    def __init__(self) -> None:
-        """Initializes a Server instance."""
-        self.__dataset: List[List] = []
-
+    def __init__(self):
+        self.__dataset = None
 
     def dataset(self) -> List[List]:
         """Loads the dataset from the CSV file, caching it after the first load."""
