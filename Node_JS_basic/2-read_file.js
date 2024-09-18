@@ -30,7 +30,7 @@ const countStudents = (path) => {
   }
 
   const totalStudents = Object
-    .values(studentGroups)
+    .values(groups)
     .reduce((pre, cur) => (pre || []).length + cur.length);
   console.log(`Number of students: ${totalStudents}`);
   for (const [field, group] of Object.entries(groups)) {
