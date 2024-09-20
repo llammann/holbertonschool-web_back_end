@@ -1,7 +1,7 @@
 const fs = require('fs');
 
 
-const count = (dataPath) => new Promise((resolve, reject) => {
+const countStudents = (dataPath) => new Promise((resolve, reject) => {
   fs.readFile(dataPath, 'utf-8', (err, data) => {
     if (err) {
       reject(new Error('Cannot load the database'));
@@ -12,7 +12,7 @@ const count = (dataPath) => new Promise((resolve, reject) => {
         .trim()
         .split('\n');
       const groups = {};
-      const dbFieldNames = lines[0].split(',');
+      const dbFieldNames = fileLines[0].split(',');
       const studentPropNames = dbFieldNames
         .slice(0, dbFieldNames.length - 1);
 
@@ -42,4 +42,4 @@ const count = (dataPath) => new Promise((resolve, reject) => {
   });
 });
 
-module.exports = count;
+module.exports = countStudents;
