@@ -1,5 +1,5 @@
 const http = require('http');
-const count = require('./3-read_file_async');
+const countStudents = require('./3-read_file_async');
 const host = 'localhost';
 const port = 1245;
 
@@ -11,9 +11,9 @@ const app = http.createServer(async (request, response) => {
     response.end('Hello Holberton School!');
   } else if (request.url === '/students') {
     let dbInfo = 'This is the list of our students\n';
-    
+
     try {
-      const message = await count(process.argv[2]);
+      const message = await countStudents(process.argv[2]);
       dbInfo += message;
       response.end(dbInfo);
     } catch (err) {
@@ -31,4 +31,3 @@ app.listen(port, host, () => {
 });
 
 module.exports = app;
-
