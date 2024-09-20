@@ -42,4 +42,4 @@ const count = (dataPath) => new Promise((resolve, reject) => {
   });
 });
 
-module.exports = countStudents;
+module.exports = count;
