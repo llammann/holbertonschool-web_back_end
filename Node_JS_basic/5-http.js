@@ -1,6 +1,6 @@
 const http = require('http');
-const countStudents = require('./3-read_file_async');
 const url = require('url');
+const countStudents = require('./3-read_file_async');
 
 const app = http.createServer((req, res) => {
   const reqUrl = url.parse(req.url, true);
@@ -18,12 +18,12 @@ const app = http.createServer((req, res) => {
     // Read and append student data from the database
     countStudents(process.argv[2])
       .then((studentsData) => {
-        res.write(studentsData);  // Write the student data to the response
-        res.end();  // End the response after all data is written
+        res.write(studentsData); // Write the student data to the response
+        res.end(); // End the response after all data is written
       })
       .catch((err) => {
-        res.write(err.message);  // In case of error, write the error message
-        res.end();  // End the response
+        res.write(err.message); // In case of error, write the error message
+        res.end(); // End the response
       });
   } else {
     // For other paths
