@@ -1,6 +1,5 @@
 const fs = require('fs');
 
-
 const countStudents = (dataPath) => new Promise((resolve, reject) => {
   fs.readFile(dataPath, 'utf-8', (err, data) => {
     if (err) {
@@ -32,13 +31,15 @@ const countStudents = (dataPath) => new Promise((resolve, reject) => {
       const totalStudents = Object
         .values(groups)
         .reduce((pre, cur) => (pre || []).length + cur.length);
-      console.log(`Number of students: ${totalStudents}`);
+
+
+        let responseText = `Number of students: ${totalStudents}\n`;
       for (const [field, group] of Object.entries(groups)) {
         const names = group.map((student) => student.firstname).join(', ');
-        console.log(`Number of students in ${field}: ${group.length}. List: ${names}`);
+        responseText += `Number of students in ${field}: ${group.length}. List: ${names}\n`;
       }
-      resolve(true);
-    }
+
+      resolve(responseText);
   });
 });
 
