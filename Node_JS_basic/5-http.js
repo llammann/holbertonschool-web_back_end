@@ -13,10 +13,15 @@ const app = http.createServer(async (req, res) => {
       res.write('This is the list of our students\n');
 
       try {
-        const val = await countStudents(process.argv[2]);
-        res.write(`Number of students: ${val.arr.length}\n`);
-        res.write(`Number of students in CS: ${val.locateCS.length}. List: ${val.locateCS.join(', ')}\n`);
-        res.write(`Number of students in SWE: ${val.locateSWE.length}. List: ${val.locateSWE.join(', ')}\n`);
+        const studentData = await countStudents(process.argv[2]);
+
+        const totalStudents = studentData.total;
+        const csStudents = studentData.locateCS;
+        const sweStudents = studentData.locateSWE;
+
+        res.write(`Number of students: ${totalStudents}\n`);
+        res.write(`Number of students in CS: ${csStudents.length}. List: ${csStudents.join(', ')}\n`);
+        res.write(`Number of students in SWE: ${sweStudents.length}. List: ${sweStudents.join(', ')}\n`);
       } catch (err) {
         res.write('This is the list of our students\n');
         res.end(err.message);
