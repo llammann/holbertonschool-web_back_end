@@ -9,24 +9,18 @@ app.get('/', (req, res) => {
 });
 
 app.get('/students', async (req, res) => {
-  let dbInfo = 'This is the list of our students\n';
-
-  try {
-    const val = await countStudents(process.argv[2]);
-    
-    dbInfo += `Number of students: ${val.arr.length}\n`;
-    dbInfo += `Number of students in CS: ${val.locateCS.length}. List: ${val.locateCS.join(', ')}\n`;
-    dbInfo += `Number of students in SWE: ${val.locateSWE.length}. List: ${val.locateSWE.join(', ')}`;
-    
-    res.send(dbInfo);
-  } catch (err) {
-    dbInfo += err.message; // Append the error message
-    res.status(500).send(dbInfo);
-  }
+  await countStudents(process.argv[2])
+    .then((val) => {
+      res.write('This is the list of our students\n');
+      res.write(`Number of students: ${val.arr.length}\n`);
+      res.write(`Number of students in CS: ${val.locateCS.length}. List: ${val.locateCS.join(', ')}\n`);
+      res.write(`Number of students in SWE: ${val.locateSWE.length}. List: ${val.locateSWE.join(', ')}\n`);
+      res.end();
+    })
+    .catch((err) => {
+      res.write('This is the list of our students\n');
+      res.end(err.message);
+    });
 });
-
-app.listen(port, () => {
-  console.log(`Server listening at http://localhost:${port}`);
-});
-
+app.listen(port);
 module.exports = app;
