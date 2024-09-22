@@ -16,16 +16,16 @@ app.get('/students', async (req, res) => {
   res.write('This is the list of our students\n');
 
   try {
-    const groups = await countStudents(database);
+    const groups = await countStudents(database); // Assume countStudents returns an object of groups
     const totalStudents = Object.values(groups).reduce((acc, group) => acc + group.length, 0);
-
+    
     res.write(`Number of students: ${totalStudents}\n`);
 
     for (const [field, group] of Object.entries(groups)) {
-      const names = group.map((student) => student.firstname).join(', ');
+      const names = group.map(student => student.firstname).join(', ');
       res.write(`Number of students in ${field}: ${group.length}. List: ${names}\n`);
     }
-
+    
     res.end();
   } catch (error) {
     res.end(`${error.message}`);
