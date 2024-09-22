@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 
 app.get('/students', async (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
-  res.write('This is the list of our students\n');
+  res.write('This is the list of our students');
 
   try {
     const data = await countStudents(database);
