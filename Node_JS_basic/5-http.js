@@ -1,40 +1,44 @@
 const http = require('http');
-const countStudents = require('./3-read_file_async');
-const url = require('url');
+const processStudents = require('./3-read_file_async');
 
-const app = http.createServer((req, res) => {
-  const reqUrl = url.parse(req.url, true);
+const serverPort = 1245;
 
-  if (reqUrl.pathname === '/') {
+const app = http
+  .createServer(async (request, response) => {
+    if (request.url === '/') {
+      response.end('Welcome to Holberton School!');
+    } else if (request.url === '/students') {
+      response.write('Here is the list of our students\n');
 
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.write('Hello Holberton School!');
-    res.end();
-  } else if (reqUrl.pathname === '/students') {
+      await processStudents(process.argv[2])
+        .then((studentData) => {
+          const fieldsArray = Object.keys(studentData);
 
-    res.writeHead(200, { 'Content-Type': 'text/plain' });
-    res.write('This is the list of our students\n');
+          const totalCount = fieldsArray.reduce(
+            (accumulator, currentField) => accumulator + studentData[currentField].totalCount,
+            0,
+          );
 
+          response.write(`Total number of students: ${totalCount}\n`);
 
-    countStudents(process.argv[2])
-      .then((studentsData) => {
-        res.write(studentsData);
-        res.end();
-      })
-      .catch((err) => {
-        res.write(err.message);
-        res.end();
-      });
-  } else {
+          for (let index = 0; index < fieldsArray.length; index += 1) {
+            response.write(
+              `Number of students in ${fieldsArray[index]}: ${studentData[fieldsArray[index]].totalCount}. `,
+            );
+            response.write(`List: ${studentData[fieldsArray[index]].namesList.join(', ')}`);
 
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.end('Not Found');
-  }
-});
-
-
-app.listen(1245, () => {
-  console.log('Server is listening on port 1245');
-});
+            if (index < fieldsArray.length - 1) {
+              response.write('\n');
+            }
+          }
+        })
+        .catch((error) => {
+          response.write(error.message);
+        })
+        .finally(() => {
+          response.end();
+        });
+    }
+  }).listen(serverPort);
 
 module.exports = app;
