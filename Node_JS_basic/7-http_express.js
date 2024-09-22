@@ -21,7 +21,7 @@ app.get('/students', async (req, res) => {
 
     for (const [field, group] of Object.entries(data)) {
       const names = group.map((student) => student.firstname).join(', ');
-      res.write(`Number of students in ${field}: ${group.length}. List: ${names}`);
+      res.write(`Number of students in ${field}: ${group.length}. List: ${names}\n`);
     }
     res.end();
   } catch (error) {
@@ -30,7 +30,7 @@ app.get('/students', async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
+  console.log(`Server is listening on port ${port}\n`);
 });
 
 module.exports = app;
