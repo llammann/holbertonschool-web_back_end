@@ -12,7 +12,7 @@ app.get('/', (req, res) => {
 
 app.get('/students', async (req, res) => {
   res.setHeader('Content-Type', 'text/plain');
-  res.write('This is the list of our students');
+  res.write('This is the list of our students\n');
 
   try {
     const data = await countStudents(database);
@@ -21,7 +21,7 @@ app.get('/students', async (req, res) => {
 
     for (const [field, group] of Object.entries(data)) {
       const names = group.map((student) => student.firstname).join(', ');
-      res.write(`Number of students in ${field}: ${group.length}. List: ${names}\n`);
+      res.write(`Number of students in ${field}: ${group.length}. List: ${names}`);
     }
     res.end();
   } catch (error) {
