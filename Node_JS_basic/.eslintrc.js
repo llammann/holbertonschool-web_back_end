@@ -28,13 +28,6 @@ module.exports = {
       'WithStatement',
     ],
   },
-  settings: {
-    'import/resolver': {
-      node: {
-        extensions: ['.js'], // Include .js extension
-      },
-    },
-  },
   overrides: [
     {
       files: ['*.js'],
