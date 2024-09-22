@@ -12,19 +12,15 @@ app.get('/students', async (req, res) => {
   let dbInfo = 'This is the list of our students\n';
 
   try {
-    const studentData = await countStudents(process.argv[2]);
-
-    const totalStudents = studentData.total;
-    const csStudents = studentData.locateCS || [];
-    const sweStudents = studentData.locateSWE || [];
-
-    dbInfo += `Number of students: ${totalStudents}\n`
-              + `Number of students in CS: ${csStudents.length}. List: ${csStudents.join(', ')}\n`
-              + `Number of students in SWE: ${sweStudents.length}. List: ${sweStudents.join(', ')}`;
-
+    const val = await countStudents(process.argv[2]);
+    
+    dbInfo += `Number of students: ${val.arr.length}\n`;
+    dbInfo += `Number of students in CS: ${val.locateCS.length}. List: ${val.locateCS.join(', ')}\n`;
+    dbInfo += `Number of students in SWE: ${val.locateSWE.length}. List: ${val.locateSWE.join(', ')}`;
+    
     res.send(dbInfo);
   } catch (err) {
-    dbInfo += err.message;
+    dbInfo += err.message; // Append the error message
     res.status(500).send(dbInfo);
   }
 });
