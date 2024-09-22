@@ -1,48 +1,25 @@
 const http = require('http');
 const countStudents = require('./3-read_file_async');
 
+const hostname = '127.0.0.1';
 const port = 1245;
+const DB = process.argv[2];
 
-const app = http.createServer(async (req, res) => {
-  if (req.method === 'GET') {
-    if (req.url === '/') {
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.end('Hello Holberton School!');
-    } else if (req.url === '/students') {
-      res.writeHead(200, { 'Content-Type': 'text/plain' });
-      res.write('This is the list of our students\n');
-
-      try {
-        const studentData = await countStudents(process.argv[2]);
-        const totalStudents = studentData.total;
-        const csStudents = studentData.locateCS || [];
-        const sweStudents = studentData.locateSWE || [];
-
-        const csList = csStudents.length > 0 ? csStudents.join(', ') : 'No students';
-        const sweList = sweStudents.length > 0 ? sweStudents.join(', ') : 'No students';
-
-        const output = `Number of students: ${totalStudents}\n`
-                       + `Number of students in CS: ${csStudents.length}. List: ${csList}\n`
-                       + `Number of students in SWE: ${sweStudents.length}. List: ${sweList}\n`;
-
-        console.log(output);
-        res.end(output);
-      } catch (err) {
-        res.write('This is the list of our students\n');
-        res.end(err.message);
-      }
-    } else {
-      res.writeHead(404, { 'Content-Type': 'text/plain' });
-      res.end('Not Found');
-    }
-  } else {
-    res.writeHead(405, { 'Content-Type': 'text/plain' });
-    res.end('Method Not Allowed');
+const app = http.createServer((req, res) => {
+  res.statusCode = 200;
+  res.setHeader('Content-Type', 'text/plain');
+  if (req.url === '/') {
+    res.end('Hello Holberton School!');
+  } else if (req.url === '/students') {
+    res.write('This is the list of our students\n');
+    countStudents(DB).then((result) => {
+      res.end(result.join('\n'));
+    }).catch((error) => {
+      res.end(`${error.message}`);
+    });
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is listening on port ${port}`);
-});
+app.listen(port, hostname);
 
 module.exports = app;
