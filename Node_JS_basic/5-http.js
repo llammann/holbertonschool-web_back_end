@@ -14,14 +14,17 @@ const app = http.createServer((req, res) => {
 
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.write('This is the list of our students\n');
-    
 
-    countStudents(process.argv[2]).then(() => {
-      res.end();
-    }).catch((err) => {
-      res.write(err.message);
-      res.end();
-    });
+
+    countStudents(process.argv[2])
+      .then((studentsData) => {
+        res.write(studentsData);
+        res.end();
+      })
+      .catch((err) => {
+        res.write(err.message);
+        res.end();
+      });
   } else {
 
     res.writeHead(404, { 'Content-Type': 'text/plain' });
