@@ -4,23 +4,39 @@ const countStudents = require('./3-read_file_async');
 const app = express();
 const port = 1245;
 
-app.get('/', (req, res) => {
+app.get('/', (_req, res) => {
   res.send('Hello Holberton School!');
 });
 
-app.get('/students', async (req, res) => {
+app.get('/students', async (_req, res) => {
+  res.write('This is the list of our students\n');
   await countStudents(process.argv[2])
-    .then((val) => {
-      res.write('This is the list of our students\n');
-      res.write(`Number of students: ${val.arr.length}\n`);
-      res.write(`Number of students in CS: ${val.locateCS.length}. List: ${val.locateCS.join(', ')}\n`);
-      res.write(`Number of students in SWE: ${val.locateSWE.length}. List: ${val.locateSWE.join(', ')}\n`);
-      res.end();
+    .then((data) => {
+      const fields = Object.keys(data);
+      const total = fields.reduce(
+        (acc, curr) => acc + data[curr].numStudents,
+        0,
+      );
+      res.write(`Number of students: ${total}\n`);
+      for (let i = 0; i < fields.length; i += 1) {
+        res.write(
+          `Number of students in ${fields[i]}: ${
+            data[fields[i]].numStudents
+          }. `,
+        );
+        res.write(`List: ${data[fields[i]].names.join(', ')}`);
+        if (i < fields.length - 1) {
+          res.write('\n');
+        }
+      }
     })
     .catch((err) => {
-      res.write('This is the list of our students\n');
-      res.end(err.message);
+      res.write(err.message);
+    })
+    .finally(() => {
+      res.end();
     });
 });
 app.listen(port);
+
 module.exports = app;
