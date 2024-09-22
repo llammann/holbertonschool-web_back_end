@@ -14,21 +14,23 @@ const app = http.createServer(async (req, res) => {
 
       try {
         const studentData = await countStudents(process.argv[2]);
-
         const totalStudents = studentData.total;
-        const csStudents = studentData.locateCS;
-        const sweStudents = studentData.locateSWE;
+        const csStudents = studentData.locateCS || [];
+        const sweStudents = studentData.locateSWE || [];
 
-        res.write(`Number of students: ${totalStudents}\n`);
-        res.write(`Number of students in CS: ${csStudents.length}. List: ${csStudents.join(', ')}\n`);
-        res.write(`Number of students in SWE: ${sweStudents.length}. List: ${sweStudents.join(', ')}\n`);
+        const csList = csStudents.length > 0 ? csStudents.join(', ') : 'No students';
+        const sweList = sweStudents.length > 0 ? sweStudents.join(', ') : 'No students';
+
+        const output = `Number of students: ${totalStudents}\n`
+                       + `Number of students in CS: ${csStudents.length}. List: ${csList}\n`
+                       + `Number of students in SWE: ${sweStudents.length}. List: ${sweList}\n`;
+
+        console.log(output);
+        res.end(output);
       } catch (err) {
         res.write('This is the list of our students\n');
         res.end(err.message);
-        return;
       }
-
-      res.end();
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('Not Found');
